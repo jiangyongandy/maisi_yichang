@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.maisi.video.obj.video.MsbRateEntity;
 import com.maisi.video.obj.video.RecommendEntity;
+import com.maisi.video.obj.video.UserInfoEntity;
 import com.maisi.video.obj.video.WechatTipsEntity;
 import com.zuiai.nn.R;
 
@@ -46,6 +47,8 @@ public class DaiLiActivity extends BaseActivity {
     TextView mTvKnow;
     @BindView(R.id.rl_guide)
     RelativeLayout mRlGuide;
+    @BindView(R.id.tv_tip)
+    TextView tvTip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,15 +138,66 @@ public class DaiLiActivity extends BaseActivity {
         * 迈思币达到1080，或者达到1080-1799，获得系统赠送迈思币200个
           迈思币达到1800，或者达到1800-2879，获得系统赠送迈思币400个
         * */
-        if (VipHelperUtils.getInstance().getVipUserInfo().getCommendLeft() >= 360) {
-            mRlGuide.setVisibility(View.VISIBLE);
-            mTvKnow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mRlGuide.setVisibility(View.GONE);
-                }
-            });
-        }
+        Service.getComnonService().requestLogin(VipHelperUtils.getInstance().getVipUserInfo().getUid())
+                .compose(BoyiRxUtils.<UserInfoEntity>applySchedulers())
+                .subscribe(new Subscriber<UserInfoEntity>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(
+                                APPAplication.instance,
+                                e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNext(final UserInfoEntity result) {
+
+                        if (result.getGiveAmount() != 0) {
+                            mRlGuide.setVisibility(View.VISIBLE);
+                            tvTip.setText("您的迈思币数额已达到" +result.getCommendLeft()+ "，恭喜您获得额外迈思币奖励"+ result.getGiveAmount()+ "～");
+                            mTvKnow.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mRlGuide.setVisibility(View.GONE);
+
+                                    Service.getComnonService().getMaisibi(VipHelperUtils.getInstance().getVipUserInfo().getUid(), result.getGiveAmount())
+                                            .compose(BoyiRxUtils.<String>applySchedulers())
+                                            .subscribe(new Subscriber<String>() {
+                                                @Override
+                                                public void onCompleted() {
+
+                                                }
+
+                                                @Override
+                                                public void onError(Throwable e) {
+                                                    Toast.makeText(
+                                                            APPAplication.instance,
+                                                            e.getMessage(),
+                                                            Toast.LENGTH_SHORT).show();
+                                                }
+
+                                                @Override
+                                                public void onNext(final String result) {
+                                                    Toast.makeText(
+                                                            APPAplication.instance,
+                                                            "已领取奖励",
+                                                            Toast.LENGTH_SHORT).show();
+
+                                                }
+                                            });
+
+
+                                }
+                            });
+                        }
+
+                    }
+                });
 
 
         mTvWechatUid.setText(VipHelperUtils.getInstance().getVipUserInfo().getUid());

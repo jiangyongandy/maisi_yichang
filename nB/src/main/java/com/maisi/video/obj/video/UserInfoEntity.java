@@ -20,6 +20,7 @@ public class UserInfoEntity implements Serializable {
      * enable : 1
      * commendNo : null
      * ifFirst : 1
+     * giveAmount: 50.0
      */
 
 
@@ -27,6 +28,7 @@ public class UserInfoEntity implements Serializable {
     private double vipLeft;
     private double pointsLeft;
     private double commendLeft;
+    private double giveAmount;
     private long createdTime;
     private Object lastupdatedTime;
     private int enable;
@@ -113,5 +115,13 @@ public class UserInfoEntity implements Serializable {
 
     public void setWeiChatUserInfo(WeiChatUserInfo weiChatUserInfo) {
         this.weiChatUserInfo = weiChatUserInfo;
+    }
+
+    public double getGiveAmount() {
+        return giveAmount;
+    }
+
+    public void setGiveAmount(double giveAmount) {
+        this.giveAmount = giveAmount;
     }
 }
