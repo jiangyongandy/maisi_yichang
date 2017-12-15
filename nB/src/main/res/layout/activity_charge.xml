@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/navigation1"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:background="#ffffff"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="充值激活VIP"
+            style="@style/title_bar_text"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="#dddddd" />
+
+        <RelativeLayout
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:onClick="onBackView"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_info_arrow_back" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="50dp"
+                android:text="充值金额："
+                android:textColor="#000000"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <org.cocos2dx.lua.ui.widget.NoScrollGridView
+                android:id="@+id/gv_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:horizontalSpacing="10dp"
+                android:numColumns="2"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="5dp" />
+
+<!--            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_charge_catalog1"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/selector_price_tab"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="月卡VIP15元"
+                        android:textColor="#000000"
+                        android:textSize="22sp"
+                         />
+
+                    <TextView
+                        android:id="@+id/tv_source_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:text="原价18.8元"
+                        android:textColor="#ef2a2b"
+                        android:textSize="16sp"
+                         />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_charge_catalog2"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_margin="20dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:background="@drawable/selector_price_tab"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="季卡VIP40元"
+                        android:textColor="#000000"
+                        android:textSize="22sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_source_price2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:text="原价56元"
+                        android:textColor="#ef2a2b"
+                        android:textSize="16sp"
+                        />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_charge_catalog3"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/selector_price_tab"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="半年VIP72元"
+                        android:textColor="#000000"
+                        android:textSize="22sp"
+                         />
+
+                    <TextView
+                        android:id="@+id/tv_source_price3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:text="原价112元"
+                        android:textColor="#ef2a2b"
+                        android:textSize="16sp"
+                         />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_charge_catalog4"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/selector_price_tab"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="年卡VIP126元"
+                        android:textColor="#000000"
+                        android:textSize="22sp"
+                         />
+
+                    <TextView
+                        android:id="@+id/tv_source_price4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:text="原价225元"
+                        android:textColor="#ef2a2b"
+                        android:textSize="16sp"
+                         />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>-->
+
+            <TextView
+                android:id="@+id/iv_real_charge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:padding="4dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:text="积分抵现后仅需支付："
+                android:textColor="#313131"
+                android:textSize="14sp"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:id="@+id/iv_charge"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="充值VIP"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:background="@drawable/btn_charge_bg_selected"
+                />
+
+            <EditText
+                android:id="@+id/et_recommend_num"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_margin="20dp"
+                android:paddingBottom="25dp"
+                android:drawablePadding="15dp"
+                android:hint="推荐码(只有首充用户可以使用哦~~)："
+                android:inputType="text"
+                android:maxLength="18"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:textColorHint="#999999"
+                android:textColor="#333333"
+                android:enabled="false"
+                />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

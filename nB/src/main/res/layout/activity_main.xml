@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <RadioGroup
+            android:id="@+id/rb"
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:background="#ffffff"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_niuying"
+                style="@style/tabbar"
+                android:checked="true"
+                android:drawableTop="@drawable/sel_home_video"
+                android:text="首页"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_vip_play" />
+
+            <RadioButton
+                android:id="@+id/rb_person"
+                style="@style/tabbar"
+                android:drawableTop="@drawable/sel_person_video"
+                android:text="个人中心"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+
+        </RadioGroup>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_guide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#88000000"
+        android:clickable="true"
+        android:visibility="gone"
+        >
+
+        <RelativeLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="10dp"
+            android:background="@drawable/bg_play_tips"
+            >
+
+            <TextView
+                android:id="@+id/tv_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#808080"
+                android:textSize="16sp"
+                android:text="新用户第一天可以任性看～～"
+                />
+
+            <ImageView
+                android:id="@+id/iv_vip_tip"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/tv_tip"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_vip_play" />
+
+            <TextView
+                android:id="@+id/tv_know"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_centerInParent="true"
+                android:layout_below="@id/iv_vip_tip"
+                android:textColor="#fff86f0f"
+                android:textSize="18sp"
+                android:text="知道啦!"
+                />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</FrameLayout>
