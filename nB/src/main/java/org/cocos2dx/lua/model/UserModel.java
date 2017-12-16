@@ -1,37 +1,27 @@
 package org.cocos2dx.lua.model;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
-import com.blankj.utilcode.util.AppUtils;
 import com.google.gson.Gson;
-import com.maisi.video.obj.video.AppInfo;
+import com.maisi.video.obj.WeiChatUserInfo;
 import com.maisi.video.obj.video.ChargeRequestEntity;
 import com.maisi.video.obj.video.PayResult;
+import com.maisi.video.obj.video.UserInfoEntity;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.maisi.video.obj.WeiChatUserInfo;
-import com.maisi.video.obj.video.UserInfoEntity;
 
 import org.cocos2dx.lua.APPAplication;
-import org.cocos2dx.lua.AppHelperUtils;
 import org.cocos2dx.lua.BoyiRxUtils;
 import org.cocos2dx.lua.CommonConstant;
 import org.cocos2dx.lua.EventBusTag;
 import org.cocos2dx.lua.VipHelperUtils;
 import org.cocos2dx.lua.service.Service;
-import org.cocos2dx.lua.ui.AppListActivity;
 import org.simple.eventbus.EventBus;
 
 import java.util.Map;
@@ -41,7 +31,6 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
@@ -57,6 +46,7 @@ public class UserModel {
     private int action = -1;
 
     private Class intent;
+    private boolean needVip;
 
     public static UserModel getInstance() {
         if(instance == null)
@@ -137,6 +127,14 @@ public class UserModel {
                                     VipHelperUtils.getInstance().setValidVip(false);
                                 }
                                 if(intent != null) {
+                                    if(needVip) {
+
+                                        needVip = false;
+                                        if(!VipHelperUtils.getInstance().isValidVip()) {
+                                            return;
+                                        }
+
+                                    }
                                     Intent intent1 = new Intent(activity, intent);
                                     activity.startActivity(intent1);
                                     intent = null;
@@ -330,6 +328,29 @@ public class UserModel {
 
     public void launchActivity(Activity context, Class intent) {
         if (VipHelperUtils.getInstance().isWechatLogin()) {
+            Intent intent1 = new Intent(context, intent);
+            context.startActivity(intent1);
+        }else {
+            this.intent = intent;
+            login(context);
+        }
+    }
+
+    public void launchActivity(Activity context, Class intent, boolean needVip) {
+        this.needVip = needVip;
+        if (VipHelperUtils.getInstance().isWechatLogin() ) {
+            if(this.needVip) {
+
+                this.needVip = false;
+                if(!VipHelperUtils.getInstance().isValidVip()) {
+                    Toast.makeText(
+                            APPAplication.instance,
+                            "需要重新激活VIP才能正常使用哦~.~",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+            }
             Intent intent1 = new Intent(context, intent);
             context.startActivity(intent1);
         }else {

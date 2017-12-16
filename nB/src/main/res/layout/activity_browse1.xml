@@ -45,7 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#88000000"
-            android:visibility="visible"
+            android:visibility="gone"
+            android:clickable="true"
             >
 
             <RelativeLayout
@@ -82,9 +83,11 @@
                     android:layout_marginTop="20dp"
                     android:layout_centerInParent="true"
                     android:layout_below="@id/iv_vip_tip"
+                    android:background="@null"
                     android:textColor="#fff86f0f"
                     android:textSize="18sp"
                     android:text="知道啦!"
+                    android:clickable="true"
                     />
 
             </RelativeLayout>
