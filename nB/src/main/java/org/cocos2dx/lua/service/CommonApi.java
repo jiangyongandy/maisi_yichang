@@ -100,4 +100,8 @@ public interface CommonApi {
     @GET("user/getMaisibi/{uid}/{giveAmount}")
     Observable<String > getMaisibi(@Path("uid") String id, @Path("giveAmount") double giveAmount);
 
+    //--支付宝提现 http://39.108.151.95:8000/MyApp/alipay/alitransfer
+    @POST("alipay/alitransfer")
+    Observable<String > alitransfer(@Body RequestBody body);
+
 }

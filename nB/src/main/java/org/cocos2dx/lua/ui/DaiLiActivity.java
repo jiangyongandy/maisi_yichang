@@ -6,6 +6,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.gson.Gson;
+import com.maisi.video.obj.video.CashRequestEntity;
 import com.maisi.video.obj.video.MsbRateEntity;
 import com.maisi.video.obj.video.RecommendEntity;
 import com.maisi.video.obj.video.UserInfoEntity;
@@ -19,6 +22,9 @@ import org.cocos2dx.lua.service.Service;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -49,6 +55,10 @@ public class DaiLiActivity extends BaseActivity {
     RelativeLayout mRlGuide;
     @BindView(R.id.tv_tip)
     TextView tvTip;
+    @BindView(R.id.rl_ti_xian)
+    RelativeLayout rlTiXian;
+
+    private RecommendEntity result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +169,7 @@ public class DaiLiActivity extends BaseActivity {
 
                         if (result.getGiveAmount() != 0) {
                             mRlGuide.setVisibility(View.VISIBLE);
-                            tvTip.setText("您的迈思币数额已达到" +result.getCommendLeft()+ "，恭喜您获得额外迈思币奖励"+ result.getGiveAmount()+ "～");
+                            tvTip.setText("您的迈思币数额已达到" + result.getCommendLeft() + "，恭喜您获得额外迈思币奖励" + result.getGiveAmount() + "～");
                             mTvKnow.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -229,13 +239,70 @@ public class DaiLiActivity extends BaseActivity {
 
                     @Override
                     public void onNext(RecommendEntity result) {
+                        DaiLiActivity.this.result = result;
                         if (result.getCommendNo() != null)
                             mTvRecommendNo.setText(result.getCommendNo());
 //                        if (result.getCommendLeft() != null)
-                        mTvRecommendLeft.setText(result.getCommendLeft() + "迈思币");
+                        mTvRecommendLeft.setText(result.getCommendLeft() + "迈思币\n当前兑换人民币为：" + result.getCommend2cash() + "元");
                     }
                 });
 
     }
 
+    @OnClick(R.id.rl_ti_xian)
+    public void onClick() {
+
+        if (!VipHelperUtils.getInstance().isWechatLogin()) {
+            Toast.makeText(
+                    APPAplication.instance,
+                    "请先登录~~",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(DaiLiActivity.this.result == null) {
+            Toast.makeText(
+                    APPAplication.instance,
+                    "请稍候再试~~",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new MaterialDialog.Builder(this)
+                .title("输入支付宝账号")
+                .content("请确认输入正确哦")
+                .input("请填写正确", "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+
+                        if(input == null || input.length() == 0) {
+                            Toast.makeText(
+                                    APPAplication.instance,
+                                    "请先输入提现账号~~",
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        CashRequestEntity  entity = new CashRequestEntity ();
+                        entity.setUid(VipHelperUtils.getInstance().getVipUserInfo().getUid());
+                        entity.setAmount(DaiLiActivity.this.result.getCommend2cash());
+                        entity.setMaisibi(VipHelperUtils.getInstance().getVipUserInfo().getCommendLeft());
+                        entity.setPayeeAccount(input.toString());
+                        Gson gson = new Gson();
+                        String toJson = gson.toJson(entity);
+                        RequestBody body = RequestBody.create(MediaType.parse("application/json"), toJson);
+                        Service.getComnonService().alitransfer(body)
+                                .compose(BoyiRxUtils.<String>applySchedulers())
+                                .subscribe(new BoyiRxUtils.MySubscriber<String>() {
+
+                                    @Override
+                                    public void onNext(String result) {
+                                        Toast.makeText(
+                                                APPAplication.instance,
+                                                "提现申请已提交，请耐心等待",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                }).show();
+
+    }
 }

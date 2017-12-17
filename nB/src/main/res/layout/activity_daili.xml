@@ -196,11 +196,11 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_ti_xian"
             android:layout_width="fill_parent"
             android:layout_height="48dp"
-            android:background="#ffffff"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:background="@drawable/sel_common_item_bg"
+            >
 
             <TextView
                 android:layout_width="wrap_content"

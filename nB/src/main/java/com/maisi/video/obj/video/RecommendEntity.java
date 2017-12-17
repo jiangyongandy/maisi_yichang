@@ -20,12 +20,14 @@ public class RecommendEntity implements Serializable {
      * enable : 1
      * commendNo : EOUZ6UO4J3
      * ifFirst : 1
+     * commend2cash: 0
      */
 
     private String uid;
     private double vipLeft;
     private double pointsLeft;
     private double commendLeft;
+    private double commend2cash;
     private long createdTime;
     private Object lastupdatedTime;
     private int enable;
@@ -102,5 +104,13 @@ public class RecommendEntity implements Serializable {
 
     public void setIfFirst(int ifFirst) {
         this.ifFirst = ifFirst;
+    }
+
+    public double getCommend2cash() {
+        return commend2cash;
+    }
+
+    public void setCommend2cash(double commend2cash) {
+        this.commend2cash = commend2cash;
     }
 }
