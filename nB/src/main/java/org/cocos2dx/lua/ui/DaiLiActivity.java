@@ -17,8 +17,11 @@ import com.zuiai.nn.R;
 
 import org.cocos2dx.lua.APPAplication;
 import org.cocos2dx.lua.BoyiRxUtils;
+import org.cocos2dx.lua.EventBusTag;
 import org.cocos2dx.lua.VipHelperUtils;
+import org.cocos2dx.lua.model.UserModel;
 import org.cocos2dx.lua.service.Service;
+import org.simple.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +60,8 @@ public class DaiLiActivity extends BaseActivity {
     TextView tvTip;
     @BindView(R.id.rl_ti_xian)
     RelativeLayout rlTiXian;
+    @BindView(R.id.tv_recommend_left_rmb)
+    TextView tvRecommendLeftRmb;
 
     private RecommendEntity result;
 
@@ -243,9 +248,18 @@ public class DaiLiActivity extends BaseActivity {
                         if (result.getCommendNo() != null)
                             mTvRecommendNo.setText(result.getCommendNo());
 //                        if (result.getCommendLeft() != null)
-                        mTvRecommendLeft.setText(result.getCommendLeft() + "迈思币\n当前兑换人民币为：" + result.getCommend2cash() + "元");
+                        mTvRecommendLeft.setText(result.getCommendLeft() + "迈思币");
+                        tvRecommendLeftRmb.setText("当前兑换人民币为：" + result.getCommend2cash() + "元");
                     }
                 });
+
+    }
+
+
+    @org.simple.eventbus.Subscriber(tag = EventBusTag.TAG_LOGIN_SUCCESS, mode = ThreadMode.MAIN)
+    public void userInfoChange(UserInfoEntity entity) {
+        mTvRecommendLeft.setText(entity.getCommendLeft() + "迈思币");
+        tvRecommendLeftRmb.setText("当前兑换人民币为：" + entity.getCommend2cash() + "元");
 
     }
 
@@ -259,7 +273,7 @@ public class DaiLiActivity extends BaseActivity {
                     Toast.LENGTH_SHORT).show();
             return;
         }
-        if(DaiLiActivity.this.result == null) {
+        if (DaiLiActivity.this.result == null) {
             Toast.makeText(
                     APPAplication.instance,
                     "请稍候再试~~",
@@ -274,14 +288,14 @@ public class DaiLiActivity extends BaseActivity {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
 
-                        if(input == null || input.length() == 0) {
+                        if (input == null || input.length() == 0) {
                             Toast.makeText(
                                     APPAplication.instance,
                                     "请先输入提现账号~~",
                                     Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        CashRequestEntity  entity = new CashRequestEntity ();
+                        CashRequestEntity entity = new CashRequestEntity();
                         entity.setUid(VipHelperUtils.getInstance().getVipUserInfo().getUid());
                         entity.setAmount(DaiLiActivity.this.result.getCommend2cash());
                         entity.setMaisibi(VipHelperUtils.getInstance().getVipUserInfo().getCommendLeft());
@@ -289,20 +303,31 @@ public class DaiLiActivity extends BaseActivity {
                         Gson gson = new Gson();
                         String toJson = gson.toJson(entity);
                         RequestBody body = RequestBody.create(MediaType.parse("application/json"), toJson);
-                        Service.getComnonService().alitransfer(body)
+                        Service.getComnonServiceForString().alitransfer(body)
                                 .compose(BoyiRxUtils.<String>applySchedulers())
                                 .subscribe(new BoyiRxUtils.MySubscriber<String>() {
 
                                     @Override
                                     public void onNext(String result) {
-                                        Toast.makeText(
-                                                APPAplication.instance,
-                                                "提现申请已提交，请耐心等待",
-                                                Toast.LENGTH_SHORT).show();
+                                        if (result.equals("success")) {
+
+                                            Toast.makeText(
+                                                    APPAplication.instance,
+                                                    "提现成功",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(
+                                                    APPAplication.instance,
+                                                    "提现失败",
+                                                    Toast.LENGTH_SHORT).show();
+
+                                        }
+                                        UserModel.getInstance().refreshUserInfo();
                                     }
                                 });
                     }
                 }).show();
 
     }
+
 }
