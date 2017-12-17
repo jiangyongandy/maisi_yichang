@@ -37,8 +37,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-import static com.umeng.socialize.utils.DeviceConfig.context;
-
 /**
  * 功能
  * Created by Jiang on 2017/11/30.
@@ -136,7 +134,7 @@ public class UserModel {
 
                                         needVip = false;
                                         if(!VipHelperUtils.getInstance().isValidVip()) {
-                                            MaterialDialog dialog = new MaterialDialog.Builder(context)
+                                            MaterialDialog dialog = new MaterialDialog.Builder(activity)
                                                     .title("VIP已过期")
                                                     .content("VIP已过期不能愉快的观看啦，是否前往充值？")
                                                     .positiveText("立即充值")
