@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
 import com.maisi.video.obj.WeiChatUserInfo;
@@ -22,6 +24,7 @@ import org.cocos2dx.lua.CommonConstant;
 import org.cocos2dx.lua.EventBusTag;
 import org.cocos2dx.lua.VipHelperUtils;
 import org.cocos2dx.lua.service.Service;
+import org.cocos2dx.lua.ui.ChargeActivity;
 import org.simple.eventbus.EventBus;
 
 import java.util.Map;
@@ -33,6 +36,8 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
+import static com.umeng.socialize.utils.DeviceConfig.context;
 
 /**
  * 功能
@@ -131,6 +136,24 @@ public class UserModel {
 
                                         needVip = false;
                                         if(!VipHelperUtils.getInstance().isValidVip()) {
+                                            MaterialDialog dialog = new MaterialDialog.Builder(context)
+                                                    .title("VIP已过期")
+                                                    .content("VIP已过期不能愉快的观看啦，是否前往充值？")
+                                                    .positiveText("立即充值")
+                                                    .negativeText("稍等")
+                                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                        @Override
+                                                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                                                            UserModel.getInstance().launchActivity(activity, ChargeActivity.class);
+                                                        }
+                                                    })
+                                                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                                        @Override
+                                                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                                                            dialog.dismiss();
+                                                        }
+                                                    })
+                                                    .show();
                                             return;
                                         }
 
@@ -336,17 +359,32 @@ public class UserModel {
         }
     }
 
-    public void launchActivity(Activity context, Class intent, boolean needVip) {
+    public void launchActivity(final Activity context, Class intent, boolean needVip) {
         this.needVip = needVip;
         if (VipHelperUtils.getInstance().isWechatLogin() ) {
             if(this.needVip) {
 
                 this.needVip = false;
                 if(!VipHelperUtils.getInstance().isValidVip()) {
-                    Toast.makeText(
-                            APPAplication.instance,
-                            "需要重新激活VIP才能正常使用哦~.~",
-                            Toast.LENGTH_SHORT).show();
+
+                    MaterialDialog dialog = new MaterialDialog.Builder(context)
+                            .title("VIP已过期")
+                            .content("VIP已过期不能愉快的观看啦，是否前往充值？")
+                            .positiveText("立即充值")
+                            .negativeText("稍等")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+                                    UserModel.getInstance().launchActivity(context, ChargeActivity.class);
+                                }
+                            })
+                            .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
                     return;
                 }
 
