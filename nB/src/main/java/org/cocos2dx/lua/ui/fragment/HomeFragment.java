@@ -160,7 +160,7 @@ public class HomeFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_jiaoliu:
-                boolean isSuccess = joinQQGroup("pCo-XXeSfTMjeGd1yW2EEwohf0hx0HsA");
+                boolean isSuccess = joinQQGroup("zlDHUMF3T4RKF2aBJM6-gdztKChdjjJY");
                 if (isSuccess) {
 
                 } else {

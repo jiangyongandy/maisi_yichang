@@ -31,7 +31,7 @@ public class VipHelperUtils {
 
     public static VipHelperUtils instance;
 
-    public static String shareDescription = "我发现了一个可以破解全网VIP视频的APP，不用充钱享会员，满满黑科技⊙ω⊙。下载地址：http://39.108.151.95:8000/MyApp/apk/com.zuiai.nn.apk";
+    public static String shareDescription = "我发现了一个可以破解全网VIP视频的APP，不用充钱享会员，满满黑科技⊙ω⊙。下载地址：http://39.108.151.95:8000/MyApp/apk/nB-release.apk";
     public static String shareLink = "http://39.108.151.95:8000/MyApp/apk/nB-release.apk";
 
     //接口地址

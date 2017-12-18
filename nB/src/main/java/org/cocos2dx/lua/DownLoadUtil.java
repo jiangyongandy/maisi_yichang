@@ -10,6 +10,9 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+import android.widget.Toast;
+
+import com.blankj.utilcode.util.AppUtils;
 
 import java.io.File;
 
@@ -44,21 +47,43 @@ public class DownLoadUtil {
         Cursor c = downloadManager.query(query);
         if (c.moveToFirst()) {
             int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
+            Logger.showLog("----------" + status, "下载状态");
             switch (status) {
                 case DownloadManager.STATUS_PAUSED:
+                    Toast.makeText(
+                            APPAplication.instance,
+                            ">>>下载暂停",
+                            Toast.LENGTH_SHORT).show();
                     Log.i("",">>>下载暂停");
                 case DownloadManager.STATUS_PENDING:
+                    Toast.makeText(
+                            APPAplication.instance,
+                            ">>>下载延迟",
+                            Toast.LENGTH_SHORT).show();
                     Log.i("",">>>下载延迟");
                 case DownloadManager.STATUS_RUNNING:
+                    Toast.makeText(
+                            APPAplication.instance,
+                            ">>>正在下载",
+                            Toast.LENGTH_SHORT).show();
                     Log.i("",">>>正在下载");
                     break;
                 case DownloadManager.STATUS_SUCCESSFUL:
+                    Toast.makeText(
+                            APPAplication.instance,
+                            ">>>下载完成",
+                            Toast.LENGTH_SHORT).show();
                     Log.i("",">>>下载完成");
                     //下载完成安装APK
                     String downloadPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + File.separator + versionName;
-                    installAPK(new File(downloadPath));
+                    AppUtils.installApp(new File(downloadPath), "com.zuiai.nn.fileprovider");
+//                    installAPK(new File(downloadPath));
                     break;
                 case DownloadManager.STATUS_FAILED:
+                    Toast.makeText(
+                            APPAplication.instance,
+                            ">>>下载失败",
+                            Toast.LENGTH_SHORT).show();
                     Log.i("",">>>下载失败");
                     break;
             }
