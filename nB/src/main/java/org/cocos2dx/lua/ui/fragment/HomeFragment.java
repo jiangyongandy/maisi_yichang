@@ -1,8 +1,6 @@
 package org.cocos2dx.lua.ui.fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -22,7 +20,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.maisi.video.obj.video.BannerEntity;
 import com.maisi.video.obj.video.NotifyEntity;
-import com.maisi.video.obj.video.UserInfoEntity;
 import com.tmall.ultraviewpager.UltraViewPager;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
@@ -33,7 +30,6 @@ import com.zuiai.nn.R;
 
 import org.cocos2dx.lua.APPAplication;
 import org.cocos2dx.lua.CommonConstant;
-import org.cocos2dx.lua.EventBusTag;
 import org.cocos2dx.lua.VipHelperUtils;
 import org.cocos2dx.lua.model.UserModel;
 import org.cocos2dx.lua.service.Service;
@@ -46,7 +42,6 @@ import org.cocos2dx.lua.ui.widget.BannerPageAdapter;
 import org.cocos2dx.lua.ui.widget.NoScrollGridView;
 import org.cocos2dx.lua.ui.widget.holder.CBViewHolderCreator;
 import org.cocos2dx.lua.ui.widget.holder.Holder;
-import org.simple.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -366,7 +361,9 @@ public class HomeFragment extends BaseFragment {
             return;
         }
 
-        if (VipHelperUtils.getInstance().isWechatLogin()) {
+        UserModel.getInstance().launchActivity(getActivity(), BrowserActivity.class, true);
+
+        /*if (VipHelperUtils.getInstance().isWechatLogin()) {
 
             Service.getComnonService().requestLogin(VipHelperUtils.getInstance().getVipUserInfo().getUid())
                     .subscribeOn(Schedulers.io())
@@ -485,7 +482,7 @@ public class HomeFragment extends BaseFragment {
                                 }
                             }).show();
 
-        }
+        }*/
     }
 
     /****************

@@ -1,27 +1,25 @@
 package org.cocos2dx.lua.ui;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.blankj.utilcode.util.AppUtils;
 import com.maisi.video.obj.video.UpdateEntity;
 import com.umeng.socialize.UMShareAPI;
 import com.zuiai.nn.R;
 
 import org.cocos2dx.lua.APPAplication;
-import org.cocos2dx.lua.DataHelper;
 import org.cocos2dx.lua.DownLoadUtil;
 import org.cocos2dx.lua.service.Service;
 import org.cocos2dx.lua.ui.common.CommonPageAdapter;
@@ -133,7 +131,7 @@ public class MainActivity extends BaseActivity {
         });
         currentTabIndex = 0;
 //guide
-        boolean isFirstRun = DataHelper.getBoolSp(this, IS_FIRST_RUN_TIPS, true);
+/*        boolean isFirstRun = DataHelper.getBoolSp(this, IS_FIRST_RUN_TIPS, true);
         if(isFirstRun) {
             mRlGuide.setVisibility(View.VISIBLE);
             mTvKnow.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +141,7 @@ public class MainActivity extends BaseActivity {
                 }
             });
         }
-        DataHelper.setBoolSF(this, IS_FIRST_RUN_TIPS, false);
+        DataHelper.setBoolSF(this, IS_FIRST_RUN_TIPS, false);*/
 
         //版本更新
         Service.getComnonService().versionUpdate()
@@ -176,7 +174,29 @@ public class MainActivity extends BaseActivity {
                     public void onNext(final UpdateEntity result) {
                         if (Integer.parseInt(result.getValue1()) > AppUtils.getAppVersionCode()) {
 
-                            new AlertDialog.Builder(MainActivity.this)
+                            MaterialDialog dialog = new MaterialDialog.Builder(MainActivity.this)
+                                    .title("有新版本")
+                                    .content("有最新版本是否立即下载？（强烈推荐下载获取更稳定体验！！）")
+                                    .positiveText("马上下载")
+                                    .negativeText("取消")
+                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                                            if (result.getValue2() != null) {
+                                                DownLoadUtil downLoadUtil = new DownLoadUtil(MainActivity.this);
+                                                downLoadUtil.downloadAPK(result.getValue2(), "迈思最新版");
+                                            }
+                                        }
+                                    })
+                                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                                            dialog.dismiss();
+                                        }
+                                    })
+                                    .show();
+
+                            /*new AlertDialog.Builder(MainActivity.this)
                                     .setTitle("有最新版本是否立即下载？（强烈推荐下载获取更稳定体验！！）")
                                     .setPositiveButton("马上下载",
                                             new DialogInterface.OnClickListener() {
@@ -205,7 +225,7 @@ public class MainActivity extends BaseActivity {
                                                 public void onCancel(DialogInterface dialog) {
 
                                                 }
-                                            }).show();
+                                            }).show();*/
 
                         }
 

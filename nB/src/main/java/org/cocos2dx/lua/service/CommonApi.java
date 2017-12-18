@@ -96,4 +96,12 @@ public interface CommonApi {
     @GET("user/getValueWithKey/maisibiRate")
     Observable<MsbRateEntity > getMaisibiRate();
 
+    //--系统奖励迈思币 http://39.108.151.95:8000/MyApp/user/getMaisibi/lihong_01/400
+    @GET("user/getMaisibi/{uid}/{giveAmount}")
+    Observable<String > getMaisibi(@Path("uid") String id, @Path("giveAmount") double giveAmount);
+
+    //--支付宝提现 http://39.108.151.95:8000/MyApp/alipay/alitransfer
+    @POST("alipay/alitransfer")
+    Observable<String > alitransfer(@Body RequestBody body);
+
 }

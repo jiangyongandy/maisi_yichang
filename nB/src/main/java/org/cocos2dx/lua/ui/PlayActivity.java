@@ -1,7 +1,5 @@
 package org.cocos2dx.lua.ui;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -24,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.test_webview_demo.utils.X5WebView;
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient.CustomViewCallback;
 import com.tencent.smtt.export.external.interfaces.JsResult;
@@ -442,7 +442,20 @@ public class PlayActivity extends BaseActivity  {
                 + (System.currentTimeMillis() - time));
         CookieSyncManager.createInstance(this);
         CookieSyncManager.getInstance().sync();
-        new AlertDialog.Builder(this)
+
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .title("温馨提示")
+                .content(VipHelperUtils.getInstance().getTips())
+                .positiveText("知道了")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+
+        /*new AlertDialog.Builder(this)
                 .setTitle(VipHelperUtils.getInstance().getTips())
                 .setPositiveButton("确定",
                         new DialogInterface.OnClickListener() {
@@ -473,7 +486,7 @@ public class PlayActivity extends BaseActivity  {
                                         "取消...",
                                         Toast.LENGTH_SHORT).show();
                             }
-                        }).show();
+                        }).show();*/
     }
 
     boolean[] m_selected = new boolean[]{true, true, true, true, false,
