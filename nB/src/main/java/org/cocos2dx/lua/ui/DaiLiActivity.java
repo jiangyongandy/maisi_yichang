@@ -46,6 +46,8 @@ public class DaiLiActivity extends BaseActivity {
     TextView mTvKnow;
     @BindView(R.id.rl_guide)
     RelativeLayout mRlGuide;
+    @BindView(R.id.tv_tip)
+    TextView mTvTip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
