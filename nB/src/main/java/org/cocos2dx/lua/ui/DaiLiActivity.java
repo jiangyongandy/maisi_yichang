@@ -1,11 +1,14 @@
 package org.cocos2dx.lua.ui;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.maisi.video.obj.video.CashRequestEntity;
@@ -62,8 +65,12 @@ public class DaiLiActivity extends BaseActivity {
     RelativeLayout rlTiXian;
     @BindView(R.id.tv_recommend_left_rmb)
     TextView tvRecommendLeftRmb;
+    @BindView(R.id.rl_transfer)
+    RelativeLayout mRlTransfer;
 
     private RecommendEntity result;
+    private EditText  amountInput;
+    private EditText  transferAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,9 +270,86 @@ public class DaiLiActivity extends BaseActivity {
 
     }
 
-    @OnClick(R.id.rl_ti_xian)
-    public void onClick() {
+    @OnClick({R.id.rl_ti_xian, R.id.rl_transfer})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.rl_ti_xian:
+                go2Cash();
+                break;
+            case R.id.rl_transfer:
+                go2Transfer();
+                break;
+        }
+    }
 
+    private void go2Transfer() {
+        if (!VipHelperUtils.getInstance().isWechatLogin()) {
+            Toast.makeText(
+                    APPAplication.instance,
+                    "请先登录~~",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (DaiLiActivity.this.result == null) {
+            Toast.makeText(
+                    APPAplication.instance,
+                    "请稍候再试~~",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        MaterialDialog dialog =
+                new MaterialDialog.Builder(this)
+                        .title("输入对方推荐码和转账金额")
+                        .customView(R.layout.dialog_input_transfer, true)
+                        .positiveText("确定")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                String amount = amountInput.getText().toString();
+                                String account = transferAccount.getText().toString();
+                                if ( amount.length() == 0 || account.length() == 0 ) {
+                                    Toast.makeText(
+                                            APPAplication.instance,
+                                            "请确定推荐码和金额填写完整~~",
+                                            Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                Service.getComnonServiceForString().giveMSB2Other(VipHelperUtils.getInstance().getVipUserInfo().getUid(), Double.parseDouble(amount), account)
+                                        .compose(BoyiRxUtils.<String>applySchedulers())
+                                        .subscribe(new BoyiRxUtils.MySubscriber<String>() {
+
+                                            @Override
+                                            public void onNext(String result) {
+                                                if (result.equals("success")) {
+
+                                                    Toast.makeText(
+                                                            APPAplication.instance,
+                                                            "转账成功！",
+                                                            Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(
+                                                            APPAplication.instance,
+                                                            "转账失败！",
+                                                            Toast.LENGTH_SHORT).show();
+
+                                                }
+                                                UserModel.getInstance().refreshUserInfo();
+                                            }
+                                        });
+
+                            }
+                        })
+                        .build();
+        dialog.show();
+        amountInput = dialog.getCustomView().findViewById(R.id.et_amount);
+        transferAccount = dialog.getCustomView().findViewById(R.id.et_recommend_num);
+
+
+
+    }
+
+    private void go2Cash() {
         if (!VipHelperUtils.getInstance().isWechatLogin()) {
             Toast.makeText(
                     APPAplication.instance,
@@ -327,7 +411,7 @@ public class DaiLiActivity extends BaseActivity {
                                 });
                     }
                 }).show();
-
     }
+
 
 }

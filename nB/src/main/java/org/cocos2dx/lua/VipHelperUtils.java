@@ -89,10 +89,14 @@ public class VipHelperUtils {
     private List<PlayLineEntity> youkuUrls = new ArrayList<>();
     private List<PlayLineEntity> aqyUrls = new ArrayList<>();
     private List<PlayLineEntity> tencentUrls = new ArrayList<>();
+    private List<PlayLineEntity> mangGuoUrls = new ArrayList<>();
+    private List<PlayLineEntity> leShiUrls = new ArrayList<>();
     private List<PlayLineEntity> otherUrls = new ArrayList<>();
     private int youkuApiIndex;
     private int aqyApiIndex;
     private int tencentApiIndex;
+    private int mongoApiIndex;
+    private int letvApiIndex;
     private int otherApiIndex;
 
     public static VipHelperUtils getInstance() {
@@ -312,6 +316,24 @@ public class VipHelperUtils {
                     currentApi = youkuUrls.get(youkuApiIndex).getValue1();
                 }
                 break;
+            //mongo
+            case 5:
+                if (mangGuoUrls.size() > 0) {
+                    mongoApiIndex++;
+                    if (mongoApiIndex >= mangGuoUrls.size())
+                        mongoApiIndex = 0;
+                    currentApi = mangGuoUrls.get(mongoApiIndex).getValue1();
+                }
+                break;
+            //letv
+            case 0:
+                if (leShiUrls.size() > 0) {
+                    letvApiIndex++;
+                    if (letvApiIndex >= leShiUrls.size())
+                        letvApiIndex = 0;
+                    currentApi = leShiUrls.get(letvApiIndex).getValue1();
+                }
+                break;
         }
 
         view.loadUrl("javascript:" +
@@ -406,6 +428,14 @@ public class VipHelperUtils {
                 if (youkuUrls.size() > 0)
                     currentApi = youkuUrls.get(youkuApiIndex).getValue1();
                 break;
+            case 5:
+                if (mangGuoUrls.size() > 0)
+                    currentApi = mangGuoUrls.get(mongoApiIndex).getValue1();
+                break;
+            case 0:
+                if (leShiUrls.size() > 0)
+                    currentApi = leShiUrls.get(letvApiIndex).getValue1();
+                break;
         }
         return currentApi;
     }
@@ -417,17 +447,7 @@ public class VipHelperUtils {
 
     public void updatePlayLineByServer() {
         Service.getComnonService().getPlayLine(15)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Toast.makeText(
-                                APPAplication.instance,
-                                "错误:" + throwable.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .compose(BoyiRxUtils.<ArrayList<PlayLineEntity>>applySchedulers())
                 .subscribe(new Subscriber<ArrayList<PlayLineEntity>>() {
                     @Override
                     public void onCompleted() {
@@ -454,17 +474,7 @@ public class VipHelperUtils {
                 });
 
         Service.getComnonService().getPlayLine(16)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Toast.makeText(
-                                APPAplication.instance,
-                                "错误:" + throwable.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .compose(BoyiRxUtils.<ArrayList<PlayLineEntity>>applySchedulers())
                 .subscribe(new Subscriber<ArrayList<PlayLineEntity>>() {
                     @Override
                     public void onCompleted() {
@@ -491,17 +501,7 @@ public class VipHelperUtils {
                 });
 
         Service.getComnonService().getPlayLine(17)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Toast.makeText(
-                                APPAplication.instance,
-                                "错误:" + throwable.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .compose(BoyiRxUtils.<ArrayList<PlayLineEntity>>applySchedulers())
                 .subscribe(new Subscriber<ArrayList<PlayLineEntity>>() {
                     @Override
                     public void onCompleted() {
@@ -526,19 +526,61 @@ public class VipHelperUtils {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-
-        Service.getComnonService().getPlayLine(22)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(new Action1<Throwable>() {
+        Service.getComnonService().getPlayLine(18)
+                .compose(BoyiRxUtils.<ArrayList<PlayLineEntity>>applySchedulers())
+                .subscribe(new Subscriber<ArrayList<PlayLineEntity>>() {
                     @Override
-                    public void call(Throwable throwable) {
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
                         Toast.makeText(
                                 APPAplication.instance,
-                                "错误:" + throwable.getMessage(),
+                                e.getMessage(),
                                 Toast.LENGTH_SHORT).show();
                     }
-                })
+
+                    @Override
+                    public void onNext(ArrayList<PlayLineEntity> result) {
+                        mangGuoUrls.clear();
+                        mangGuoUrls.addAll(result);
+                        Toast.makeText(
+                                APPAplication.instance,
+                                "mangguo线路已更新",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+        Service.getComnonService().getPlayLine(19)
+                .compose(BoyiRxUtils.<ArrayList<PlayLineEntity>>applySchedulers())
+                .subscribe(new Subscriber<ArrayList<PlayLineEntity>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(
+                                APPAplication.instance,
+                                e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<PlayLineEntity> result) {
+                        leShiUrls.clear();
+                        leShiUrls.addAll(result);
+                        Toast.makeText(
+                                APPAplication.instance,
+                                "letv线路已更新",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        Service.getComnonService().getPlayLine(22)
+                .compose(BoyiRxUtils.<ArrayList<PlayLineEntity>>applySchedulers())
                 .subscribe(new Subscriber<ArrayList<PlayLineEntity>>() {
                     @Override
                     public void onCompleted() {

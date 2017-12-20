@@ -26,7 +26,7 @@ import rx.Observable;
 
 public interface CommonApi {
 
-    //登录会员后台 http://39.108.151.95:8000/MyApp/user/getUser/11
+    //登录会员后台 http://39.108.151.95:8000/MyApp/user/getUser/{id}
     @GET("user/getUser/{id}")
     Observable<UserInfoEntity> requestLogin(@Path("id") String id);
 
@@ -63,6 +63,8 @@ public interface CommonApi {
     优酷：http://39.108.151.95:8000/MyApp/user/getDicByGroup/15
     爱奇艺：http://39.108.151.95:8000/MyApp/user/getDicByGroup/16
     腾讯：http://39.108.151.95:8000/MyApp/user/getDicByGroup/17
+    芒果：http://39.108.151.95:8000/MyApp/user/getDicByGroup/18
+    乐视：http://39.108.151.95:8000/MyApp/user/getDicByGroup/19
     其他：http://39.108.151.95:8000/MyApp/user/getDicByGroup/22
     * */
     @GET("user/getDicByGroup/{uid}")
@@ -99,6 +101,10 @@ public interface CommonApi {
     //--系统奖励迈思币 http://39.108.151.95:8000/MyApp/user/getMaisibi/lihong_01/400
     @GET("user/getMaisibi/{uid}/{giveAmount}")
     Observable<String > getMaisibi(@Path("uid") String id, @Path("giveAmount") double giveAmount);
+
+    //--转账迈思币 http://39.108.151.95:8000/MyApp/user/giveMSB2Other/{uid}/{giveAmount}/{commendno}
+    @GET("user/giveMSB2Other/{uid}/{giveAmount}/{commendno}")
+    Observable<String > giveMSB2Other(@Path("uid") String id, @Path("giveAmount") double giveAmount, @Path("commendno") String commendNo);
 
     //--支付宝提现 http://39.108.151.95:8000/MyApp/alipay/alitransfer
     @POST("alipay/alitransfer")
