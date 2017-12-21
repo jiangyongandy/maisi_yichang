@@ -300,7 +300,7 @@ public class DaiLiActivity extends BaseActivity {
 
         MaterialDialog dialog =
                 new MaterialDialog.Builder(this)
-                        .title("输入对方推荐码和转账金额")
+                        .title("输入对方推荐码和转账数量")
                         .customView(R.layout.dialog_input_transfer, true)
                         .positiveText("确定")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -311,7 +311,7 @@ public class DaiLiActivity extends BaseActivity {
                                 if ( amount.length() == 0 || account.length() == 0 ) {
                                     Toast.makeText(
                                             APPAplication.instance,
-                                            "请确定推荐码和金额填写完整~~",
+                                            "请确定推荐码和数量填写完整~~",
                                             Toast.LENGTH_SHORT).show();
                                     return;
                                 }

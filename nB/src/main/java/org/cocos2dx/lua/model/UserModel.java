@@ -167,7 +167,10 @@ public class UserModel {
 
             @Override
             public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-
+                Toast.makeText(
+                        APPAplication.instance,
+                        "错误:" + throwable.getMessage(),
+                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -190,7 +193,10 @@ public class UserModel {
 
             @Override
             public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-
+                Toast.makeText(
+                        APPAplication.instance,
+                        "错误:" + throwable.getMessage(),
+                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
