@@ -14,20 +14,20 @@
         android:text="请确定填写正确哦~~"/>
 
     <EditText
-        android:id="@+id/et_amount"
+        android:id="@+id/et_pay_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:hint="请填写转账迈思币数量"
+        android:hint="输入支付宝账号"
         android:textColor="#000000"
         android:textSize="16sp" />
 
     <EditText
-        android:id="@+id/et_recommend_num"
+        android:id="@+id/et_pay_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:hint="请填写对方推荐码"
+        android:hint="输入支付宝实名认证"
         android:textColor="#000000"
         android:textSize="16sp" />
 
